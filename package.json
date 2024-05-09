@@ -1,0 +1,12 @@
+{
+  "name": "shopsearch",
+  "version": "1.0.0",
+  "description": "## Objective: Generate multiple HTML links from a **single input**   Single input uses same search terms on designated sites (checkbox toggle for whether site is included or excluded)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

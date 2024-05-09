@@ -14,7 +14,7 @@ Single input uses same search terms on designated sites (checkbox toggle for whe
 - SNKRS
 - DTLR
 - Hibbett City Gear
-- Locls Crew
+- Kicks Crew
 - Shoe Palace
 - Snipes
 

@@ -1,4 +1,3 @@
-
 import './App.css'; // Ensure this line correctly points to your CSS file
 import { searchEngine } from './searchEngine';
 import React, { useState } from 'react';
@@ -6,19 +5,27 @@ import React, { useState } from 'react';
 function App() {
   const [searchInput, setSearchInput] = useState('');
   const [results, setResults] = useState([]);
-  const [lastSearch, setLastSearch] = useState('');
+  const [recentSearches, setRecentSearches] = useState([]);  // Store recent searches in an array
 
   const handleSearch = () => {
     const searchResults = searchEngine(searchInput);
     setResults(searchResults);
-    setLastSearch(searchInput);  // Save the last searched term
-    setSearchInput('');          // Clear the input box
+    updateRecentSearches(searchInput);  // Update the list of recent searches
+    setSearchInput('');                // Clear the input box
   };
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       handleSearch();
     }
+  };
+
+  // Function to update recent searches
+  const updateRecentSearches = (searchTerm) => {
+    setRecentSearches(prevSearches => {
+      const updatedSearches = [searchTerm, ...prevSearches];
+      return updatedSearches.slice(0, 3);  // Keep only the last 3 searches
+    });
   };
 
   return (
@@ -31,7 +38,18 @@ function App() {
         onKeyDown={handleKeyDown}
       />
       <button onClick={handleSearch}>Search</button>
-      {lastSearch && <p>You searched for: {lastSearch}</p>} {/* Display the last search term */}
+      <div>
+        {recentSearches.length > 0 && (
+          <div>
+            <p>Last Searches:</p>
+            <ul>
+              {recentSearches.map((search, index) => (
+                <li key={index}>{search}</li>  // Display each search on a new line
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
       {results.length > 0 && (
         <table>
           <thead>

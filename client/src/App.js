@@ -1,17 +1,17 @@
-import './App.css'; // Ensure this line correctly points to your CSS file
+import './App.css';
 import { searchEngine } from './searchEngine';
 import React, { useState } from 'react';
 
 function App() {
   const [searchInput, setSearchInput] = useState('');
   const [results, setResults] = useState([]);
-  const [recentSearches, setRecentSearches] = useState([]);  // Store recent searches in an array
+  const [recentSearches, setRecentSearches] = useState([]);
 
-  const handleSearch = () => {
-    const searchResults = searchEngine(searchInput);
+  const handleSearch = (input = searchInput) => {
+    const searchResults = searchEngine(input);
     setResults(searchResults);
-    updateRecentSearches(searchInput);  // Update the list of recent searches
-    setSearchInput('');                // Clear the input box
+    updateRecentSearches(input);
+    setSearchInput('');  // Clear the input box
   };
 
   const handleKeyDown = (event) => {
@@ -20,56 +20,63 @@ function App() {
     }
   };
 
-  // Function to update recent searches
   const updateRecentSearches = (searchTerm) => {
-    setRecentSearches(prevSearches => {
-      const updatedSearches = [searchTerm, ...prevSearches];
-      return updatedSearches.slice(0, 3);  // Keep only the last 3 searches
-    });
+    setRecentSearches(prevSearches => [searchTerm, ...prevSearches].slice(0, 3));
+  };
+
+  const clearResults = () => {
+    setResults([]);
+    setRecentSearches([]);
   };
 
   return (
-    <div className="centered">
-      <h1>Search for Shoes</h1>
-      <input 
-        type="text" 
-        value={searchInput} 
-        onChange={(e) => setSearchInput(e.target.value)}
-        onKeyDown={handleKeyDown}
-      />
-      <button onClick={handleSearch}>Search</button>
-      <div>
+    <div className="app-container">
+      <div className="navbar">
+        <button onClick={() => handleSearch("Nike")}>Nike</button>
+        <button onClick={() => handleSearch("Adidas")}>Adidas</button>
+        <button onClick={() => handleSearch("Puma")}>Puma</button>
+        <button className="clear-button" onClick={clearResults}>Clear Results</button>
+      </div>
+      <div className="main-content">
+        <h1>Search for Shoes</h1>
+        <input 
+          type="text" 
+          value={searchInput} 
+          onChange={(e) => setSearchInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+        <button onClick={() => handleSearch(searchInput)}>Search</button>
         {recentSearches.length > 0 && (
           <div>
             <p>Last Searches:</p>
             <ul>
               {recentSearches.map((search, index) => (
-                <li key={index}>{search}</li>  // Display each search on a new line
+                <li key={index}>{search}</li>
               ))}
             </ul>
           </div>
         )}
-      </div>
-      {results.length > 0 && (
-        <table>
-          <thead>
-            <tr>
-              <th>Store</th>
-              <th>Link</th>
-            </tr>
-          </thead>
-          <tbody>
-            {results.map((result, index) => (
-              <tr key={index}>
-                <td>{result.name}</td>
-                <td>
-                  <a href={result.link} target="_blank" rel="noopener noreferrer">Search results</a>
-                </td>
+        {results.length > 0 && (
+          <table>
+            <thead>
+              <tr>
+                <th>Store</th>
+                <th>Link</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+            </thead>
+            <tbody>
+              {results.map((result, index) => (
+                <tr key={index}>
+                  <td>{result.name}</td>
+                  <td>
+                    <a href={result.link} target="_blank" rel="noopener noreferrer">Search results</a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
     </div>
   );
 }
